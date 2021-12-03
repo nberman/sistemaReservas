@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\sistemaReservas.Client\sistemaReservas.Client.csproj" />
+    <ProjectReference Include="..\sistemaReservas.Shared\sistemaReservas.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

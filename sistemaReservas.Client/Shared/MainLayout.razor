@@ -1,0 +1,120 @@
+﻿@* @inherits LayoutComponentBase *@
+@* *@
+@* *@
+@* <HxMessenger Position="HxToastContainerPosition.MiddleCenter" /> *@
+@* <HxMessageBoxHost /> *@
+@* *@
+@* <div class="d-md-flex min-vh-100 container-xxl"> *@
+@* 	<HxSidebar CssClass="sticky-top"> *@
+@* 		<HeaderTemplate> *@
+@* 			<HxSidebarBrand BrandName="Reservas" BrandNameShort="D" /> *@
+@* 		</HeaderTemplate> *@
+@* 		<ItemsTemplate> *@
+@* 			<HxSidebarItem Text="Home" Icon="BootstrapIcon.Person" Href="" /> *@
+@* 			<HxSidebarItem Text="Counter" Icon="BootstrapIcon.Person" Href="counter" /> *@
+@* 			 *@
+@* 			<HxSidebarItem Text="Fetch Data" Href="fetchdata" Icon="BootstrapIcon.Clock" /> *@
+@* 			 *@
+@* 			<HxSidebarItem Text="First-level item 1" Href="TODO" Icon="BootstrapIcon.Wallet2" /> *@
+@* 			<HxSidebarItem Text="First-level item 1" Href="TODO" Icon="BootstrapIcon.ClipboardData" /> *@
+@* *@
+@* 		</ItemsTemplate> *@
+@* 		<FooterTemplate> *@
+@* 			<LoginDisplay /> *@
+@* 		</FooterTemplate> *@
+@* 	</HxSidebar> *@
+@* *@
+@* 	<main> *@
+@* 		<div class="main p-4 flex-grow-1 overflow-hidden"> *@
+@* 			@Body *@
+@* 		</div> *@
+@* 	</main> *@
+@* </div> *@
+
+
+@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
+
+<HxMessenger Position="HxToastContainerPosition.MiddleCenter" />
+<HxMessageBoxHost />
+
+<div class="d-md-flex min-vh-100 container-xxl">
+    <AuthorizeView>
+        <Authorized>
+ 			<HxSidebar CssClass="sticky-top">
+ 				<HeaderTemplate>
+ 					<HxSidebarBrand BrandName="Reservas" BrandNameShort="D" />
+ 				</HeaderTemplate>
+ 				<ItemsTemplate>
+ 					<HxSidebarItem Text="Eventos" Icon="BootstrapIcon.Calendar" Href="">
+                         <HxSidebarItem Text="Listado"/>
+                         <HxSidebarItem Text="Nuevo evento"/>                         
+                    </HxSidebarItem>
+ 					<HxSidebarItem Text="Ventas" Icon="BootstrapIcon.CurrencyDollar" Href="counter" /> 				
+ 					<HxSidebarItem Text="Pagos" Href="fetchdata" Icon="BootstrapIcon.Receipt" />
+ 					
+ 					
+		 
+ 				</ItemsTemplate>
+	            <FooterTemplate>
+		            <div b-7yp9wz11kh>
+			            <a class="nav-link position-relative" @onclick="@LogoutClick">
+				            <div class="stretched-link flex-grow-1">
+					            <div class="align-items-center">
+						            <HxIcon Icon="@BootstrapIcon.BoxArrowLeft"/>
+						            <span class="text ms-3">Salir</span>
+					            </div>
+				            </div>
+			            </a>
+		            </div>
+	            </FooterTemplate>
+ 			</HxSidebar>
+		 
+ 			<main>
+ 				<div class="main p-4 flex-grow-1 overflow-hidden">
+ 					@Body
+ 				</div>
+ 			</main>
+		</Authorized>
+        <NotAuthorized>
+            @*Just render the body so that RedirectToLogin works*@
+            @Body
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+
+@code{
+
+    async Task LogoutClick()
+    {
+        await authStateProvider.Logout();
+        navigationManager.NavigateTo("/login");
+    }
+}
+
+@* <div class="page"> *@
+@*     <AuthorizeView> *@
+@*         <Authorized> *@
+@*             $1$Show the menu and the rest of the body#1# *@
+@*             <div class="sidebar"> *@
+@*                 <NavMenu /> *@
+@*             </div> *@
+@* *@
+@*             <div class="main"> *@
+@*                 <div class="top-row px-4"> *@
+@*                     <button type="button" class="btn btn-link ml-md-auto" @onclick="@LogoutClick">Logout</button> *@
+@*                 </div> *@
+@* *@
+@*                 <div class="content px-4"> *@
+@*                     @Body *@
+@*                 </div> *@
+@*             </div> *@
+@*         </Authorized> *@
+@*         <NotAuthorized> *@
+@*             $1$Just render the body so that RedirectToLogin works#1# *@
+@*             @Body *@
+@*         </NotAuthorized> *@
+@*     </AuthorizeView> *@
+@* </div> *@

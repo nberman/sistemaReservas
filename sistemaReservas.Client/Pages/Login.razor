@@ -1,0 +1,53 @@
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+@layout LoginLayout
+@inject NavigationManager navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
+
+<h1>DÉCADA</h1>
+
+<EditForm class="form-signin" Model="@loginParameters" OnValidSubmit="@OnSubmit">
+	<DataAnnotationsValidator />
+    <h2>Ingreso</h2>
+
+	<HxInputText Label="Usuario" @bind-Value="loginParameters.UserName" />
+
+    <HxInputText Label="Contraseña" @bind-Value="loginParameters.Password" Type="InputType.Password" />	
+
+	<HxInputSwitch Label="Recordarme" @bind-Value="loginParameters.RememberMe" />
+
+	<HxSubmit Color="ThemeColor.Primary">Ingresar</HxSubmit>
+
+    @if (error != null)
+    {
+        <hr>
+        <HxAlert Color="ThemeColor.Danger"><HxIcon Icon="@BootstrapIcon.ExclamationTriangleFill" /> @error</HxAlert>
+    }
+    
+
+</EditForm>
+
+
+
+@code{
+    LoginParameters loginParameters { get; set; } = new LoginParameters();
+    string error { get; set; }
+
+    
+
+    async Task OnSubmit()
+    {        
+        error = null;
+        try
+        {
+            await authStateProvider.Login(loginParameters);
+            navigationManager.NavigateTo("");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+
+}
