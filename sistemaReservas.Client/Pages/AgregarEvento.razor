@@ -1,0 +1,19 @@
+﻿@page "/AgregarEvento"
+@attribute [Authorize]
+@using sistemaReservas.Shared
+
+<PageTitle>Agregar Evento</PageTitle>
+<h1>Agregar Evento</h1>
+
+<EditForm Model="fecha">
+	<DataAnnotationsValidator />
+    <HxInputText LabelType="LabelType.Floating" Label="Nombre" @bind-Value="valor" CssClass="my-3"/>
+	<HxInputDate LabelType="LabelType.Floating" Label="Fecha" CalendarIcon="BootstrapIcon.Calendar" @bind-Value="fecha" MinDate="@DateTime.Today" CssClass="my-3"/>
+	
+	<HxSubmit Color="ThemeColor.Primary">Agregar Evento</HxSubmit>
+</EditForm>
+
+@code { 
+	private DateTime fecha { get; set; }
+	private string valor { get; set; }
+}
