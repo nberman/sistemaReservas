@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @inject IdentityAuthenticationStateProvider authStateProvider
 
+<PageTitle>Ingresar al sistema</PageTitle>
 <h1>DÉCADA</h1>
 
 <EditForm class="form-signin" Model="@loginParameters" OnValidSubmit="@OnSubmit">
@@ -31,7 +32,7 @@
 
 @code{
     LoginParameters loginParameters { get; set; } = new LoginParameters();
-    string error { get; set; }
+    string? error { get; set; }
 
     
 

@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace sistemaReservas.Server.Models
 {
     public class TipoSilla
     {
         [Key]
-        public Guid IdTipoSilla { get; set; }
+        public int IdTipoSilla { get; set; }
         
         [Required(ErrorMessage = "Se debe indicar el tipo de silla")]
-        public Enum Tipo { get; set; }
+        public Tipo Tipo { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar el precio")]
         public decimal Precio { get; set; }

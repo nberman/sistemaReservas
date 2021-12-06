@@ -1,42 +1,8 @@
-﻿@* @inherits LayoutComponentBase *@
-@* *@
-@* *@
-@* <HxMessenger Position="HxToastContainerPosition.MiddleCenter" /> *@
-@* <HxMessageBoxHost /> *@
-@* *@
-@* <div class="d-md-flex min-vh-100 container-xxl"> *@
-@* 	<HxSidebar CssClass="sticky-top"> *@
-@* 		<HeaderTemplate> *@
-@* 			<HxSidebarBrand BrandName="Reservas" BrandNameShort="D" /> *@
-@* 		</HeaderTemplate> *@
-@* 		<ItemsTemplate> *@
-@* 			<HxSidebarItem Text="Home" Icon="BootstrapIcon.Person" Href="" /> *@
-@* 			<HxSidebarItem Text="Counter" Icon="BootstrapIcon.Person" Href="counter" /> *@
-@* 			 *@
-@* 			<HxSidebarItem Text="Fetch Data" Href="fetchdata" Icon="BootstrapIcon.Clock" /> *@
-@* 			 *@
-@* 			<HxSidebarItem Text="First-level item 1" Href="TODO" Icon="BootstrapIcon.Wallet2" /> *@
-@* 			<HxSidebarItem Text="First-level item 1" Href="TODO" Icon="BootstrapIcon.ClipboardData" /> *@
-@* *@
-@* 		</ItemsTemplate> *@
-@* 		<FooterTemplate> *@
-@* 			<LoginDisplay /> *@
-@* 		</FooterTemplate> *@
-@* 	</HxSidebar> *@
-@* *@
-@* 	<main> *@
-@* 		<div class="main p-4 flex-grow-1 overflow-hidden"> *@
-@* 			@Body *@
-@* 		</div> *@
-@* 	</main> *@
-@* </div> *@
-
-
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @inject NavigationManager navigationManager
 @inject IdentityAuthenticationStateProvider authStateProvider
 
-<HxMessenger Position="HxToastContainerPosition.MiddleCenter" />
+<HxMessenger Position="HxToastContainerPosition.BottomEnd" />
 <HxMessageBoxHost />
 
 <div class="d-md-flex min-vh-100 container-xxl">
@@ -47,9 +13,9 @@
  					<HxSidebarBrand BrandName="Reservas" BrandNameShort="D" />
  				</HeaderTemplate>
  				<ItemsTemplate>
- 					<HxSidebarItem Text="Eventos" Icon="BootstrapIcon.Calendar" Href="">
-                         <HxSidebarItem Text="Listado"/>
-                         <HxSidebarItem Text="Nuevo evento"/>                         
+ 					<HxSidebarItem Text="Eventos" Icon="BootstrapIcon.Calendar">
+                         <HxSidebarItem Text="Listado" Icon="BootstrapIcon.List" Href="ListarEventos" />
+                         <HxSidebarItem Text="Nuevo evento" Href="AgregarEvento" Icon="BootstrapIcon.Plus"/>                         
                     </HxSidebarItem>
  					<HxSidebarItem Text="Ventas" Icon="BootstrapIcon.CurrencyDollar" Href="counter" /> 				
  					<HxSidebarItem Text="Pagos" Href="fetchdata" Icon="BootstrapIcon.Receipt" />
@@ -71,11 +37,9 @@
 	            </FooterTemplate>
  			</HxSidebar>
 		 
- 			<main>
  				<div class="main p-4 flex-grow-1 overflow-hidden">
  					@Body
  				</div>
- 			</main>
 		</Authorized>
         <NotAuthorized>
             @*Just render the body so that RedirectToLogin works*@

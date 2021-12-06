@@ -81,3 +81,11 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
+
+.icon-red {
+    color: red;
+}
+
+.invalid-tooltip {
+    position: inherit !important;
+}

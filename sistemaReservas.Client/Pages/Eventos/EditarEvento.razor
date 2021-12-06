@@ -1,0 +1,116 @@
+﻿@page "/EditarEvento/{Id:int}"
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@using System.ComponentModel.DataAnnotations
+@using sistemaReservas.Shared
+
+<PageTitle>Editar Evento</PageTitle>
+
+<h1>Editar Evento</h1>
+
+@if (evento == null && !noEncontrado)
+{
+	<p><em>Cargando...</em></p>
+}
+else if (evento == null && noEncontrado)
+{
+
+	<HxAlert Color="ThemeColor.Warning">		
+		<h4 class="alert-heading"> <HxIcon Icon="@BootstrapIcon.ExclamationTriangleFill" /> Ocurrió un error</h4>
+		<hr>
+		<p>No se encontró el evento.</p>
+	</HxAlert>
+}
+else
+{
+	<EditForm Model="@evento" OnValidSubmit="@OnSubmit">
+		<DataAnnotationsValidator />
+		<HxInputText LabelType="LabelType.Floating" Label="Nombre" @bind-Value="evento.Nombre" CssClass="my-3"/>
+		<HxInputDate LabelType="LabelType.Floating" Label="Fecha"  @bind-Value="evento.Fecha" CalendarIcon="BootstrapIcon.CalendarEvent" MinDate="@DateTime.Today" CssClass="my-3"/>
+
+
+		<HxSubmit Color="ThemeColor.Primary" Icon="BootstrapIcon.CalendarCheck">Editar Evento</HxSubmit>
+
+		@if (exito == true)
+		{
+			<hr>
+			<HxAlert Color="ThemeColor.Success" Dismissible="true"><HxIcon Icon="@BootstrapIcon.CheckCircleFill" /> ¡El evento se modificó correctamente!</HxAlert>
+		}
+
+		@if (exito == false)
+		{
+			<hr>
+			<HxAlert Color="ThemeColor.Danger"><HxIcon Icon="@BootstrapIcon.ExclamationTriangleFill" />
+				<h4 class="alert-heading"> Ocurrió un error</h4>
+				<p>Por favor, revise los datos ingresados e intente nuevamente</p>
+				<hr>
+				<p class="mb-0">Si el error persiste, no dude en contactar al Soporte Técnico.</p>
+			
+				if(error != null) 
+				{
+					<hr>
+					<p class="mb-0">@error</p>
+				} 
+			</HxAlert>		
+		}
+	</EditForm>
+}
+
+
+@code{
+	[Parameter]
+	public int Id { get; set; }
+
+	protected ListarEventosParameters evento = new ListarEventosParameters();
+	string? error { get; set; } = null;
+	private HttpResponseMessage? request;
+	private bool? exito = null;
+	private bool noEncontrado = false;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			evento = await Http.GetFromJsonAsync<ListarEventosParameters>($"Api/Eventos/{Id}");
+			if (evento != null)
+			{
+				noEncontrado = true;
+			}
+		}
+		catch(Exception ex)
+		{
+			error = ex.Message;
+			noEncontrado = true;
+		}
+
+	}
+
+
+	private async Task OnSubmit()
+	{
+		error = null;
+		exito = null;
+
+		try
+		{
+			request = await Http.PutAsJsonAsync($"Api/Eventos/{evento.IdEvento}", evento);
+			if (request.IsSuccessStatusCode)
+			{
+				exito = true;
+				navigationManager.NavigateTo("/ListarEventos");
+			}
+			else
+			{
+				exito = false;
+			}
+
+		}
+		catch (Exception ex)
+		{
+			exito = false;
+			error = ex.Message;
+		}
+	}
+}
+

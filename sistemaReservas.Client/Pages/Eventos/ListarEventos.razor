@@ -1,0 +1,92 @@
+﻿@page "/ListarEventos"
+@attribute [Authorize]
+@using sistemaReservas.Shared
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@using System.ComponentModel.DataAnnotations;
+@using System.Linq;
+@inject HttpClient Http
+@inject NavigationManager navigationManager;
+
+
+<PageTitle>Eventos</PageTitle>
+<h1>Eventos</h1>
+@if (lista == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+	<HxGrid TItem="ListarEventosParameters" TableContainerCssClass="table-responsive" DataProvider="ClientSideProcessingDataProvider" PageSize="10" @ref="grid">
+		<Columns>
+			<HxGridColumn TItem="ListarEventosParameters" HeaderText="Nombre" ItemTextSelector="@(item => item.Nombre.ToString())" SortKeySelector="@(item => item.Nombre)" IsDefaultSortColumn="true" />
+			<HxGridColumn TItem="ListarEventosParameters" HeaderText="Fecha" ItemTextSelector="@(item => item.Fecha.ToString("dd/MM/yyyy"))" SortKeySelector="@(item => item.Fecha)" />
+		</Columns>
+		<ContextMenu Context="item">
+        <HxContextMenu>
+			<HxContextMenuItem Text="Editar" Icon="BootstrapIcon.Pencil" OnClick="() => EditarEvento(item)" />
+            <HxContextMenuItem OnClick="() => EliminarEvento(item)" ConfirmationQuestion="¿Está seguro de eliminar el evento?"><HxIcon CssClass="icon-red" Icon="BootstrapIcon.Trash" /><span class="icon-red">&nbsp; Eliminar</span></HxContextMenuItem>				
+        </HxContextMenu>
+    </ContextMenu>
+	</HxGrid>
+
+	@if(error != null)
+	{
+		Messenger.AddWarning(title: "¡Ocurrió un error!", message: "@error");
+	}
+
+}
+
+@code {
+	[Inject] protected IHxMessengerService Messenger { get; set; }
+
+	private HxGrid<ListarEventosParameters> grid;
+	protected ListarEventosParameters[]? lista = null;
+	protected List<ListarEventosParameters> eventos = new List<ListarEventosParameters>();
+	string? error;
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		lista = await Http.GetFromJsonAsync<ListarEventosParameters[]>("Api/Eventos");
+		if (lista != null)
+		{
+			eventos = lista.ToList();
+		}
+	}	
+
+	protected Task<GridDataProviderResult<ListarEventosParameters>> ClientSideProcessingDataProvider(GridDataProviderRequest<ListarEventosParameters> lista)
+	{
+		return Task.FromResult(lista.ApplyTo(eventos));
+	}
+
+	private async Task EliminarEvento(ListarEventosParameters item)
+	{
+		error = null;
+		try
+		{
+			var request = await Http.DeleteAsync($"Api/Eventos/{item.IdEvento}");
+			if (request.IsSuccessStatusCode)
+			{
+				eventos.Remove(item);
+				await grid.RefreshDataAsync();
+			}
+			else
+			{
+				Messenger.AddWarning(title: "¡Ocurrió un error!", message: "El evento no fue borrado.");
+			}
+		}
+		catch(Exception ex)
+		{
+			error = ex.Message;
+		}
+	}
+
+	protected async Task EditarEvento(ListarEventosParameters item)
+	{
+		navigationManager.NavigateTo($"/EditarEvento/{item.IdEvento}");
+	}
+
+
+}

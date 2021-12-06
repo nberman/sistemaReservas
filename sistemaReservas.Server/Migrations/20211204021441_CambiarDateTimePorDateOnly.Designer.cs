@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sistemaReservas.Server.Data;
 
@@ -10,9 +11,10 @@ using sistemaReservas.Server.Data;
 namespace sistemaReservas.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211204021441_CambiarDateTimePorDateOnly")]
+    partial class CambiarDateTimePorDateOnly
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -249,7 +251,7 @@ namespace sistemaReservas.Server.Migrations
                     b.Property<int?>("CantidadSillasVendidas")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Fecha")
+                    b.Property<DateOnly>("Fecha")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")

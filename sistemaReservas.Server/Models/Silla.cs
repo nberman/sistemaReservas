@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sistemaReservas.Server.Models
@@ -7,13 +6,12 @@ namespace sistemaReservas.Server.Models
     public class Silla
     {
         [Key]
-        public Guid IdSilla { get; set; }
+        public int IdSilla { get; set; }
 
-        [ForeignKey("Mesa")]
-        public Guid IdMesa { get; set; }    
+        public Mesa? Mesa { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar el tipo de silla")]
         public TipoSilla Tipo { get; set; }
-
+        
     }
 }

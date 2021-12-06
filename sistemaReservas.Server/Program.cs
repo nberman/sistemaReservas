@@ -1,15 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using sistemaReservas.Server.Data;
 using sistemaReservas.Server.Models;
+using sistemaReservas.Shared; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,25 +42,28 @@ builder.Services.ConfigureApplicationCookie(options =>
         };
     });
 
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+builder.Services.AddSwaggerGen();
+
 #endregion
 
 var app = builder.Build();
 
-// using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-// {
-//     //Note: Microsoft recommends to NOT migrate your database at Startup. 
-//     //You should consider your migration strategy according to the guidelines
-//     serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
-// }
-
-
 #region ConfigureApp
+
 
 if (app.Environment.IsDevelopment())
 {
+    using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+    {
+        serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+    }
+
     app.UseDeveloperExceptionPage();
     app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
@@ -84,12 +80,9 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-    endpoints.MapFallbackToFile("index.html");
-});
-
+app.MapRazorPages();
+app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 #endregion
 
