@@ -73,7 +73,7 @@ else
 		try
 		{
 			evento = await Http.GetFromJsonAsync<ListarEventosParameters>($"Api/Eventos/{Id}");
-			if (evento != null)
+			if (evento == null)
 			{
 				noEncontrado = true;
 			}

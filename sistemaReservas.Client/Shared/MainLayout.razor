@@ -2,7 +2,7 @@
 @inject NavigationManager navigationManager
 @inject IdentityAuthenticationStateProvider authStateProvider
 
-<HxMessenger Position="HxToastContainerPosition.BottomEnd" />
+<HxMessenger Position="ToastContainerPosition.BottomEnd" />
 <HxMessageBoxHost />
 
 <div class="d-md-flex min-vh-100 container-xxl">
@@ -15,10 +15,14 @@
  				<ItemsTemplate>
  					<HxSidebarItem Text="Eventos" Icon="BootstrapIcon.Calendar">
                          <HxSidebarItem Text="Listado" Icon="BootstrapIcon.List" Href="ListarEventos" />
-                         <HxSidebarItem Text="Nuevo evento" Href="AgregarEvento" Icon="BootstrapIcon.Plus"/>                         
+                         <HxSidebarItem Text="Nuevo evento" Href="AgregarEvento" Icon="BootstrapIcon.Plus"/>  
+                         <HxSidebarItem Text="Categorías" Icon="BootstrapIcon.Diamond">
+                             <HxSidebarItem Text="Listado" Icon="BootstrapIcon.List" Href="ListarCategorias" />
+                             <HxSidebarItem Text="Nueva categoría" Href="AgregarCategoria" Icon="BootstrapIcon.Plus" />
+                         </HxSidebarItem>
                     </HxSidebarItem>
- 					<HxSidebarItem Text="Ventas" Icon="BootstrapIcon.CurrencyDollar" Href="counter" /> 				
- 					<HxSidebarItem Text="Pagos" Href="fetchdata" Icon="BootstrapIcon.Receipt" />
+ 					<HxSidebarItem Text="Ventas" Icon="BootstrapIcon.CurrencyDollar" Href="" /> 				
+ 					<HxSidebarItem Text="Pagos" Href="" Icon="BootstrapIcon.Receipt" />
  					
  					
 		 
@@ -57,28 +61,3 @@
         navigationManager.NavigateTo("/login");
     }
 }
-
-@* <div class="page"> *@
-@*     <AuthorizeView> *@
-@*         <Authorized> *@
-@*             $1$Show the menu and the rest of the body#1# *@
-@*             <div class="sidebar"> *@
-@*                 <NavMenu /> *@
-@*             </div> *@
-@* *@
-@*             <div class="main"> *@
-@*                 <div class="top-row px-4"> *@
-@*                     <button type="button" class="btn btn-link ml-md-auto" @onclick="@LogoutClick">Logout</button> *@
-@*                 </div> *@
-@* *@
-@*                 <div class="content px-4"> *@
-@*                     @Body *@
-@*                 </div> *@
-@*             </div> *@
-@*         </Authorized> *@
-@*         <NotAuthorized> *@
-@*             $1$Just render the body so that RedirectToLogin works#1# *@
-@*             @Body *@
-@*         </NotAuthorized> *@
-@*     </AuthorizeView> *@
-@* </div> *@

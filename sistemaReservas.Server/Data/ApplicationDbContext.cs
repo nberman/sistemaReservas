@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace sistemaReservas.Server.Data
 {
@@ -24,7 +25,7 @@ namespace sistemaReservas.Server.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<TipoSilla>().Property(e => e.Tipo).HasConversion(v => v.ToString(), v => (Tipo)Enum.Parse(typeof(Tipo), v));
+            builder.Entity<TipoMesa>().Property(e => e.Color).HasConversion(v => v.ToString(), v => (KnownColor)Enum.Parse(typeof(Color), v));
             
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
@@ -36,7 +37,7 @@ namespace sistemaReservas.Server.Data
         public DbSet<Evento> Eventos { get; set; }
         public DbSet<Mesa> Mesas { get; set; }
         public DbSet<Silla> Sillas { get; set; }
-        public DbSet<TipoSilla> TiposSilla { get; set; }
+        public DbSet<TipoMesa> TipoMesa { get; set; }
         public DbSet<Entrada> Entradas { get; set; }
 
     }

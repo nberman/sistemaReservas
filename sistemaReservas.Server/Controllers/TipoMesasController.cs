@@ -12,47 +12,47 @@ namespace sistemaReservas.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TipoSillasController : ControllerBase
+    public class TipoMesasController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public TipoSillasController(ApplicationDbContext context)
+        public TipoMesasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/TipoSillas
+        // GET: api/TipoMesas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipoSilla>>> GetTiposSilla()
+        public async Task<ActionResult<IEnumerable<TipoMesa>>> GetTipoMesa()
         {
-            return await _context.TiposSilla.ToListAsync();
+            return await _context.TipoMesa.ToListAsync();
         }
 
-        // GET: api/TipoSillas/5
+        // GET: api/TipoMesas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TipoSilla>> GetTipoSilla(int id)
+        public async Task<ActionResult<TipoMesa>> GetTipoMesa(int id)
         {
-            var tipoSilla = await _context.TiposSilla.FindAsync(id);
+            var tipoMesa = await _context.TipoMesa.FindAsync(id);
 
-            if (tipoSilla == null)
+            if (tipoMesa == null)
             {
                 return NotFound();
             }
 
-            return tipoSilla;
+            return tipoMesa;
         }
 
-        // PUT: api/TipoSillas/5
+        // PUT: api/TipoMesas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTipoSilla(int id, TipoSilla tipoSilla)
+        public async Task<IActionResult> PutTipoMesa(int id, TipoMesa tipoMesa)
         {
-            if (id != tipoSilla.IdTipoSilla)
+            if (id != tipoMesa.IdTipoMesa)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tipoSilla).State = EntityState.Modified;
+            _context.Entry(tipoMesa).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace sistemaReservas.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TipoSillaExists(id))
+                if (!TipoMesaExists(id))
                 {
                     return NotFound();
                 }
@@ -73,36 +73,36 @@ namespace sistemaReservas.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/TipoSillas
+        // POST: api/TipoMesas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TipoSilla>> PostTipoSilla(TipoSilla tipoSilla)
+        public async Task<ActionResult<TipoMesa>> PostTipoMesa(TipoMesa tipoMesa)
         {
-            _context.TiposSilla.Add(tipoSilla);
+            _context.TipoMesa.Add(tipoMesa);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTipoSilla", new { id = tipoSilla.IdTipoSilla }, tipoSilla);
+            return CreatedAtAction("GetTipoMesa", new { id = tipoMesa.IdTipoMesa }, tipoMesa);
         }
 
-        // DELETE: api/TipoSillas/5
+        // DELETE: api/TipoMesas/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTipoSilla(int id)
+        public async Task<IActionResult> DeleteTipoMesa(int id)
         {
-            var tipoSilla = await _context.TiposSilla.FindAsync(id);
-            if (tipoSilla == null)
+            var tipoMesa = await _context.TipoMesa.FindAsync(id);
+            if (tipoMesa == null)
             {
                 return NotFound();
             }
 
-            _context.TiposSilla.Remove(tipoSilla);
+            _context.TipoMesa.Remove(tipoMesa);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TipoSillaExists(int id)
+        private bool TipoMesaExists(int id)
         {
-            return _context.TiposSilla.Any(e => e.IdTipoSilla == id);
+            return _context.TipoMesa.Any(e => e.IdTipoMesa == id);
         }
     }
 }

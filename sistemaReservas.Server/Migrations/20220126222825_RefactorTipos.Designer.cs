@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sistemaReservas.Server.Data;
 
@@ -10,9 +11,10 @@ using sistemaReservas.Server.Data;
 namespace sistemaReservas.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220126222825_RefactorTipos")]
+    partial class RefactorTipos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
@@ -267,9 +269,6 @@ namespace sistemaReservas.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoriaIdTipoMesa")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("EventoIdEvento")
                         .HasColumnType("INTEGER");
 
@@ -277,8 +276,6 @@ namespace sistemaReservas.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdMesa");
-
-                    b.HasIndex("CategoriaIdTipoMesa");
 
                     b.HasIndex("EventoIdEvento");
 
@@ -294,9 +291,14 @@ namespace sistemaReservas.Server.Migrations
                     b.Property<int?>("MesaIdMesa")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("TipoIdTipoMesa")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("IdSilla");
 
                     b.HasIndex("MesaIdMesa");
+
+                    b.HasIndex("TipoIdTipoMesa");
 
                     b.ToTable("Sillas");
                 });
@@ -403,19 +405,11 @@ namespace sistemaReservas.Server.Migrations
 
             modelBuilder.Entity("sistemaReservas.Server.Models.Mesa", b =>
                 {
-                    b.HasOne("sistemaReservas.Server.Models.TipoMesa", "Categoria")
-                        .WithMany()
-                        .HasForeignKey("CategoriaIdTipoMesa")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("sistemaReservas.Server.Models.Evento", "Evento")
                         .WithMany("Mesas")
                         .HasForeignKey("EventoIdEvento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Categoria");
 
                     b.Navigation("Evento");
                 });
@@ -426,7 +420,15 @@ namespace sistemaReservas.Server.Migrations
                         .WithMany("Sillas")
                         .HasForeignKey("MesaIdMesa");
 
+                    b.HasOne("sistemaReservas.Server.Models.TipoMesa", "Tipo")
+                        .WithMany()
+                        .HasForeignKey("TipoIdTipoMesa")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Mesa");
+
+                    b.Navigation("Tipo");
                 });
 
             modelBuilder.Entity("sistemaReservas.Server.Models.Evento", b =>

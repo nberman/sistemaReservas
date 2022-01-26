@@ -1,23 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace sistemaReservas.Server.Models
 {
-    public class TipoSilla
+    public class TipoMesa
     {
         [Key]
-        public int IdTipoSilla { get; set; }
+        public int IdTipoMesa { get; set; }
         
         [Required(ErrorMessage = "Se debe indicar el tipo de silla")]
-        public Tipo Tipo { get; set; }
+        public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar el precio")]
         public decimal Precio { get; set; }
+
+        [Required(ErrorMessage = "Se debe indicar un color")]
+        public KnownColor Color { get; set; }
+
     }
 }
 
-public enum Tipo
-{
-    Gold,
-    Silver,
-    VIP
-}

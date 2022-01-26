@@ -10,8 +10,6 @@ namespace sistemaReservas.Server.Models
 
         public Mesa? Mesa { get; set; }
 
-        [Required(ErrorMessage = "Se debe indicar el tipo de silla")]
-        public TipoSilla Tipo { get; set; }
-        
+      
     }
 }
