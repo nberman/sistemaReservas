@@ -5,15 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace sistemaReservas.Shared
 {
-    public class AgregarEventoParameters
+    public class ListarTipoParameters
     {
-        [Required(ErrorMessage = "Se debe indicar el nombre del evento")]
+        public int IdTipoMesa { get; set; }
+
         public string Nombre { get; set; }
 
-        [Required(ErrorMessage = "Se debe indicar la fecha del evento")]        
-        public DateTime? Fecha { get; set; } = null;
+        public string Color { get; set; }
+
+        public decimal Precio { get; set; }        
 
     }
 }

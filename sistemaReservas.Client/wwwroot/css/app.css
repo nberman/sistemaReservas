@@ -89,3 +89,15 @@
 .invalid-tooltip {
     position: inherit !important;
 }
+
+.buttonColor {
+    width: 40px !important;    
+}
+
+.cuadradito {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 2px;
+}

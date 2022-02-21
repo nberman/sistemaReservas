@@ -6,28 +6,32 @@
 @using System.Threading.Tasks
 @using System.ComponentModel.DataAnnotations
 @inject HttpClient Http
-
+@using BlazorColorPicker
 
 <PageTitle>Agregar Categoría</PageTitle>
 <h1>Agregar Categoría</h1>
 
-<EditForm Model="@agregarMesaParameters" OnValidSubmit="@OnSubmit">
+<EditForm Model="@agregarTipoParameters" OnValidSubmit="@OnSubmit">
 	<DataAnnotationsValidator />	
-	<HxSelect Label="Evento" TItem="ListarEventosParameters" TValue="int" Data="@eventos" @bind-Value="agregarMesaParameters.Evento" TextSelector="@(e => e.Nombre)" ValueSelector="@(e => e.IdEvento)" Nullable="false" NullText="-- Seleccionar evento --" NullDataText="Cargando eventos..."></HxSelect>
+	<HxInputText LabelType="LabelType.Floating" Label="Nombre" @bind-Value="agregarTipoParameters.Nombre" CssClass="my-3"/>
+	<HxInputNumber LabelType="LabelType.Floating" Label="Precio" Decimals="0" TValue="decimal" @bind-Value="agregarTipoParameters.Precio" CssClass="my-3" />
 
-	@*<HxInputNumber Label="Número de mesa" Decimals="0" TValue="int" @bind-Value="agregarMesaParameters.Numero" />*@
-	@*<HxInputNumber Label="Cantidad de sillas" Decimals="0" TValue="int" @bind-Value="agregarMesaParameters.CantidadSillas" />*@
-	@*<HxSelect Label="Categoría" TItem="ListarEventosParameters" TValue="int" Data="@eventos" @bind-Value="agregarMesaParameters.TipoMesa" TextSelector="@(e => e.Nombre)" ValueSelector="@(e => e.IdEvento)" Nullable="false" NullText="-- Seleccionar evento --" NullDataText="Cargando eventos..."></HxSelect>*@
+	<button class="hx-button btn btn-outline-primary mb-1" @onclick="OpenModal">
+		Seleccionar Color &nbsp; <div style="background-color:@color" class="buttonColor"></div> 
+	</button>
+	<ColorPicker Title="Seleccionar un color" IsOpened="isOpened" Closed="ClosedEvent" MyColor="@color"></ColorPicker>
 
-	<HxSubmit Color="ThemeColor.Primary" Icon="BootstrapIcon.CalendarPlus">Agregar Mesa</HxSubmit>
+	<br />
+	<HxSubmit Color="ThemeColor.Primary" Icon="BootstrapIcon.CalendarPlus">Agregar Categoría</HxSubmit>
 
 	@if (exito == true)
 		{			
 			<hr>
-			<HxAlert Color="ThemeColor.Success" Dismissible="true"><HxIcon Icon="@BootstrapIcon.CheckCircleFill" /> ¡La mesa se agregó correctamente!</HxAlert>			
-@*			agregarMesaParameters.Nombre = null;
-			agregarMesaParameters.Fecha = null;	*@		
-			request = null;
+		<HxAlert Color="ThemeColor.Success" Dismissible="true"><HxIcon Icon="@BootstrapIcon.CheckCircleFill" /> ¡La categoría se agregó correctamente!</HxAlert>
+		agregarTipoParameters.Nombre = null;
+		agregarTipoParameters.Precio = 0;
+		color = "#FFFFFF";
+		request = null;
 			
 		}
 
@@ -50,25 +54,26 @@
 </EditForm>
 
 @code {
-	protected AgregarMesaParameters agregarMesaParameters = new AgregarMesaParameters();
+	public AgregarTipoParameters agregarTipoParameters = new AgregarTipoParameters();
 	string? error { get; set; } = null;
 	private HttpResponseMessage? request;
 	private bool? exito = null;
 
-	protected ListarEventosParameters[]? lista = null;
-	protected List<ListarEventosParameters> eventos = new List<ListarEventosParameters>();
+	bool isOpened = false;
+	string color = "#FFFFFF";
 
-	protected override async Task OnInitializedAsync()
+	void OpenModal()
 	{
-		await base.OnInitializedAsync();
-		await Task.Delay(3000);
-
-		lista = await Http.GetFromJsonAsync<ListarEventosParameters[]>("Api/Eventos");
-				if (lista != null)
-				{
-					eventos = lista.ToList();
-				}
+		isOpened = true;
 	}
+
+	void ClosedEvent(string value)
+	{
+		color = value;
+		agregarTipoParameters.Color = color;
+		isOpened = false;
+    }
+
 
 	private async Task OnSubmit()
 	{
@@ -76,7 +81,7 @@
 		exito = null;
 		try		
 		{						
-			request = await Http.PostAsJsonAsync("Api/Mesas", agregarMesaParameters);
+			request = await Http.PostAsJsonAsync("Api/TipoMesas", agregarTipoParameters);
 			if (request.IsSuccessStatusCode)
 			{ 
 				exito = true;

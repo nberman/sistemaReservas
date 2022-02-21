@@ -8,14 +8,15 @@ namespace sistemaReservas.Server.Models
         [Key]
         public int IdTipoMesa { get; set; }
         
-        [Required(ErrorMessage = "Se debe indicar el tipo de silla")]
+        [Required(ErrorMessage = "Se debe indicar el nombre de la categoría")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar el precio")]
+        [Range(double.Epsilon, double.MaxValue, ErrorMessage = "Se debe indicar un precio mayor a $0")]
         public decimal Precio { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar un color")]
-        public KnownColor Color { get; set; }
+        public string Color { get; set; }
 
     }
 }

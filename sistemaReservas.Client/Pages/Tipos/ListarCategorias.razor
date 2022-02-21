@@ -1,0 +1,98 @@
+﻿@page "/ListarCategorias"
+@attribute [Authorize]
+@using sistemaReservas.Shared
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@using System.ComponentModel.DataAnnotations;
+@using System.Linq;
+@inject HttpClient Http
+@inject NavigationManager navigationManager;
+
+
+<PageTitle>Categorías</PageTitle>
+<h1>Categorías</h1>
+@if (lista == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+	<HxGrid TItem="ListarTipoParameters" TableContainerCssClass="table-responsive" DataProvider="ClientSideProcessingDataProvider" PageSize="10" @ref="grid">
+		<Columns>
+			<HxGridColumn TItem="ListarTipoParameters" HeaderText="Nombre" SortKeySelector="@(item => item.Nombre)" IsDefaultSortColumn="true" ItemCssClassSelector="@(item => item.Color)">
+				<ItemTemplate Context="item">					
+                    <div style="background-color:@item.Color" class="cuadradito"></div>              
+					@item.Nombre.ToString()
+				</ItemTemplate>
+			</HxGridColumn>
+			<HxGridColumn TItem="ListarTipoParameters" HeaderText="Precio" ItemTextSelector="@(item => item.Precio.ToString("C"))" SortKeySelector="@(item => item.Precio)" />
+
+		</Columns>
+		<ContextMenu Context="item">
+        <HxContextMenu>
+			<HxContextMenuItem Text="Editar" Icon="BootstrapIcon.Pencil" OnClick="() => EditarCategoria(item)" />
+            <HxContextMenuItem OnClick="() => EliminarCategoria(item)" ConfirmationQuestion="¿Está seguro de eliminar la categoría?"><HxIcon CssClass="icon-red" Icon="BootstrapIcon.Trash" /><span class="icon-red">&nbsp; Eliminar</span></HxContextMenuItem>				
+        </HxContextMenu>
+    </ContextMenu>
+	</HxGrid>
+
+	@if(error != null)
+	{
+		Messenger.AddWarning(title: "¡Ocurrió un error!", message: "@error");
+	}
+
+}
+
+@code {
+	[Inject] protected IHxMessengerService Messenger { get; set; }
+
+	private HxGrid<ListarTipoParameters> grid;
+	protected ListarTipoParameters[]? lista = null;
+	protected List<ListarTipoParameters> categorias = new List<ListarTipoParameters>();
+	string? error;
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		lista = await Http.GetFromJsonAsync<ListarTipoParameters[]>("Api/TipoMesas");
+		if (lista != null)
+		{
+			categorias = lista.ToList();
+		}
+	}	
+
+	protected Task<GridDataProviderResult<ListarTipoParameters>> ClientSideProcessingDataProvider(GridDataProviderRequest<ListarTipoParameters> lista)
+	{
+		return Task.FromResult(lista.ApplyTo(categorias));
+	}
+
+	private async Task EliminarCategoria(ListarTipoParameters item)
+	{
+		error = null;
+		try
+		{
+			var request = await Http.DeleteAsync($"Api/TipoMesas/{item.IdTipoMesa}");
+			if (request.IsSuccessStatusCode)
+			{
+				categorias.Remove(item);
+				await grid.RefreshDataAsync();
+			}
+			else
+			{
+				Messenger.AddWarning(title: "¡Ocurrió un error!", message: "La categoría no fue borrada.");
+			}
+		}
+		catch(Exception ex)
+		{
+			error = ex.Message;
+		}
+	}
+
+	protected async Task EditarCategoria(ListarTipoParameters item)
+	{
+		navigationManager.NavigateTo($"/EditarCategoria/{item.IdTipoMesa}");
+	}
+
+
+}

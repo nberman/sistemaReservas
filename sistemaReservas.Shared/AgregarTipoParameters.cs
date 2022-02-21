@@ -9,15 +9,16 @@ using System.Drawing;
 
 namespace sistemaReservas.Shared
 {
-    internal class AgregarTipoParameters
+    public class AgregarTipoParameters
     {
         [Required(ErrorMessage = "Se debe indicar el nombre de la categoría")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar un color")]
-        public KnownColor Color { get; set; }
+        public string Color { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar el precio")]
+        [Range(double.Epsilon, double.MaxValue, ErrorMessage = "Se debe indicar un precio mayor a $0")]
         public decimal Precio { get; set; }
     }
 }

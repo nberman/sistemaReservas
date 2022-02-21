@@ -25,7 +25,6 @@ namespace sistemaReservas.Server.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<TipoMesa>().Property(e => e.Color).HasConversion(v => v.ToString(), v => (KnownColor)Enum.Parse(typeof(Color), v));
             
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
