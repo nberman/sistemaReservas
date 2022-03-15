@@ -12,21 +12,31 @@
 <h1>Agregar Mesa</h1>
 
 <EditForm Model="@agregarMesaParameters" OnValidSubmit="@OnSubmit">
-	<DataAnnotationsValidator />	
-	@*<HxSelect Label="Evento" TItem="ListarEventosParameters" TValue="int" Data="@eventos" @bind-Value="agregarMesaParameters.Evento" TextSelector="@(e => e.Nombre)" ValueSelector="@(e => e.IdEvento)" Nullable="false" NullText="-- Seleccionar evento --" NullDataText="Cargando eventos..."></HxSelect>*@
+	<DataAnnotationsValidator />
+	
+	@if (eventos != null)
+	{		
+		<HxSelect Label="Evento" TItem="ListarEventosParameters" TValue="int?" Data="@eventos" @bind-Value="@agregarMesaParameters.Evento" TextSelector="@(p => p.Nombre)" ValueSelector="@(p => p.IdEvento)" Nullable="false" NullText="-- Seleccionar Evento --" NullDataText="Cargando eventos..." />
 
-	@*<HxInputNumber Label="Número de mesa" Decimals="0" TValue="int" @bind-Value="agregarMesaParameters.Numero" />*@
-	@*<HxInputNumber Label="Cantidad de sillas" Decimals="0" TValue="int" @bind-Value="agregarMesaParameters.CantidadSillas" />*@
-	@*<HxSelect Label="Categoría" TItem="ListarEventosParameters" TValue="int" Data="@eventos" @bind-Value="agregarMesaParameters.TipoMesa" TextSelector="@(e => e.Nombre)" ValueSelector="@(e => e.IdEvento)" Nullable="false" NullText="-- Seleccionar evento --" NullDataText="Cargando eventos..."></HxSelect>*@
+		<HxInputNumber Label="Número de mesa" TValue="int" @bind-Value="agregarMesaParameters.Numero" />
+		<HxInputNumber Label="Cantidad de sillas" TValue="int" @bind-Value="agregarMesaParameters.CantidadSillas" />
 
+		@if (categorias != null)
+		{
+			<HxSelect Label="Categoría" TItem="ListarTipoParameters" TValue="int?" Data="@categorias" @bind-Value="@agregarMesaParameters.TipoMesa" TextSelector="@(p => p.Nombre)" ValueSelector="@(p => p.IdTipoMesa)" Nullable="false" NullText="-- Seleccionar Categoría --" NullDataText="Cargando categorías..." />
+		}
+
+	}
+
+   	
 	<HxSubmit Color="ThemeColor.Primary" Icon="BootstrapIcon.CalendarPlus">Agregar Mesa</HxSubmit>
 
-	@if (exito == true)
+	@*@if (exito == true)
 		{			
 			<hr>
-			<HxAlert Color="ThemeColor.Success" Dismissible="true"><HxIcon Icon="@BootstrapIcon.CheckCircleFill" /> ¡La mesa se agregó correctamente!</HxAlert>			
-			@*agregarMesaParameters.Nombre = null;*@
-			@*agregarMesaParameters.Fecha = null;			*@
+			<HxAlert Color="ThemeColor.Success" Dismissible="true"><HxIcon Icon="@BootstrapIcon.CheckCircleFill" /> ¡El evento se cargó correctamente!</HxAlert>			
+			agregarEventoParameters.Nombre = null;
+			agregarEventoParameters.Fecha = null;			
 			request = null;
 			
 		}
@@ -46,7 +56,7 @@
 				<p class="mb-0">@error</p>
 			} 
 		</HxAlert>		
-	}
+	}*@
 </EditForm>
 
 @code {
@@ -54,20 +64,25 @@
 	string? error { get; set; } = null;
 	private HttpResponseMessage? request;
 	private bool? exito = null;
-
 	protected ListarEventosParameters[]? lista = null;
 	protected List<ListarEventosParameters> eventos = new List<ListarEventosParameters>();
+	protected ListarTipoParameters[]? listaCat = null;
+	protected List<ListarTipoParameters> categorias = new List<ListarTipoParameters>();
 
 	protected override async Task OnInitializedAsync()
 	{
-		await base.OnInitializedAsync();
-		await Task.Delay(3000);
-
+		agregarMesaParameters.Evento = null;
+		agregarMesaParameters.TipoMesa = null;
 		lista = await Http.GetFromJsonAsync<ListarEventosParameters[]>("Api/Eventos");
-				if (lista != null)
-				{
-					eventos = lista.ToList();
-				}
+		if (lista != null)
+		{
+			eventos = lista.ToList();
+		}
+		listaCat = await Http.GetFromJsonAsync<ListarTipoParameters[]>("Api/TipoMesas");
+		if (listaCat != null)
+		{
+			categorias = listaCat.ToList();
+		}
 	}
 
 	private async Task OnSubmit()

@@ -10,7 +10,7 @@ namespace sistemaReservas.Shared
     public class AgregarMesaParameters
     {
         [Required(ErrorMessage = "Se debe indicar el evento")]
-        public int Evento { get; set; }
+        public int? Evento { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar el número de mesa.")]
         public int Numero { get; set; }
@@ -19,7 +19,7 @@ namespace sistemaReservas.Shared
         public int CantidadSillas { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar la categoría de la mesa.")]
-        public string TipoMesa { get; set; }
+        public int? TipoMesa { get; set; }
 
     }
 }
