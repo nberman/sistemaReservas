@@ -14,9 +14,9 @@ namespace sistemaReservas.Server.Models
         public int NumeroMesa { get; set; }
 
         [Required(ErrorMessage = "Se debe indicar la categoría de la mesa")]
-        public TipoMesa Categoria { get; set; }
+        public TipoMesa? Categoria { get; set; }
 
         [Required(ErrorMessage = "Se deben agregar las sillas a la mesa")]
-        public ICollection<Silla>? Sillas { get; set; }
+        public List<Silla>? Sillas { get; set; }
     }
 }

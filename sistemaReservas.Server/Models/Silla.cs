@@ -8,8 +8,8 @@ namespace sistemaReservas.Server.Models
         [Key]
         public int IdSilla { get; set; }
 
-        public Mesa? Mesa { get; set; }
+        public string Estado { get; set; } = "Libre";
 
-      
+
     }
 }
